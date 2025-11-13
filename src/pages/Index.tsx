@@ -1,10 +1,19 @@
 import { useState } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Icon from '@/components/ui/icon';
+
+interface Skin {
+  name: string;
+  weapon: string;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  value: number;
+  image?: string;
+}
 
 interface Case {
   id: number;
@@ -13,6 +22,7 @@ interface Case {
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   image: string;
   description: string;
+  skins: Skin[];
 }
 
 const cases: Case[] = [
@@ -22,7 +32,14 @@ const cases: Case[] = [
     price: 99,
     rarity: 'common',
     image: 'https://cdn.poehali.dev/projects/9c9d1bba-30a2-40ab-9f99-d84dc68eb0fd/files/e81e3797-dc41-4889-8196-f40e158910bc.jpg',
-    description: 'Идеальный выбор для новичков'
+    description: 'Идеальный выбор для новичков',
+    skins: [
+      { name: 'FAMAS | Колония', weapon: 'FAMAS', rarity: 'common', value: 10 },
+      { name: 'P250 | Песчаная дюна', weapon: 'P250', rarity: 'common', value: 8 },
+      { name: 'MAC-10 | Леденец', weapon: 'MAC-10', rarity: 'rare', value: 15 },
+      { name: 'AK-47 | Пустынный повстанец', weapon: 'AK-47', rarity: 'rare', value: 20 },
+      { name: 'M4A4 | Поседевший', weapon: 'M4A4', rarity: 'epic', value: 35 },
+    ]
   },
   {
     id: 2,
@@ -30,7 +47,15 @@ const cases: Case[] = [
     price: 499,
     rarity: 'legendary',
     image: 'https://cdn.poehali.dev/projects/9c9d1bba-30a2-40ab-9f99-d84dc68eb0fd/files/9390f328-7669-463d-a1d3-f2482440f973.jpg',
-    description: 'Максимальные шансы на эпик'
+    description: 'Максимальные шансы на эпик',
+    skins: [
+      { name: 'AK-47 | Азимов', weapon: 'AK-47', rarity: 'epic', value: 60 },
+      { name: 'AWP | Драконья пасть', weapon: 'AWP', rarity: 'legendary', value: 150 },
+      { name: 'M4A1-S | Хот-род', weapon: 'M4A1-S', rarity: 'legendary', value: 120 },
+      { name: 'Glock-18 | Fade', weapon: 'Glock-18', rarity: 'epic', value: 75 },
+      { name: 'Desert Eagle | Блейзер', weapon: 'Desert Eagle', rarity: 'epic', value: 80 },
+      { name: 'Karambit | Автотроника', weapon: 'Нож', rarity: 'legendary', value: 250 },
+    ]
   },
   {
     id: 3,
@@ -38,7 +63,14 @@ const cases: Case[] = [
     price: 299,
     rarity: 'epic',
     image: 'https://cdn.poehali.dev/projects/9c9d1bba-30a2-40ab-9f99-d84dc68eb0fd/files/516fd7e3-1fe4-47de-ac5f-1fca937bb329.jpg',
-    description: 'Редкие предметы гарантированы'
+    description: 'Редкие предметы гарантированы',
+    skins: [
+      { name: 'M4A4 | Азимов', weapon: 'M4A4', rarity: 'rare', value: 40 },
+      { name: 'AWP | Красная линия', weapon: 'AWP', rarity: 'epic', value: 55 },
+      { name: 'AK-47 | Красная линия', weapon: 'AK-47', rarity: 'epic', value: 50 },
+      { name: 'USP-S | Орион', weapon: 'USP-S', rarity: 'rare', value: 35 },
+      { name: 'Desert Eagle | Код красный', weapon: 'Desert Eagle', rarity: 'epic', value: 60 },
+    ]
   },
   {
     id: 4,
@@ -46,7 +78,14 @@ const cases: Case[] = [
     price: 199,
     rarity: 'rare',
     image: 'https://cdn.poehali.dev/projects/9c9d1bba-30a2-40ab-9f99-d84dc68eb0fd/files/e81e3797-dc41-4889-8196-f40e158910bc.jpg',
-    description: 'Скины для настоящих воинов'
+    description: 'Скины для настоящих воинов',
+    skins: [
+      { name: 'AK-47 | Красный ламинат', weapon: 'AK-47', rarity: 'rare', value: 25 },
+      { name: 'M4A1-S | Атомный сплав', weapon: 'M4A1-S', rarity: 'rare', value: 28 },
+      { name: 'AWP | Красная змея', weapon: 'AWP', rarity: 'epic', value: 45 },
+      { name: 'Glock-18 | Сумерки', weapon: 'Glock-18', rarity: 'rare', value: 22 },
+      { name: 'P90 | Азимов', weapon: 'P90', rarity: 'rare', value: 30 },
+    ]
   },
   {
     id: 5,
@@ -54,7 +93,14 @@ const cases: Case[] = [
     price: 399,
     rarity: 'epic',
     image: 'https://cdn.poehali.dev/projects/9c9d1bba-30a2-40ab-9f99-d84dc68eb0fd/files/516fd7e3-1fe4-47de-ac5f-1fca937bb329.jpg',
-    description: 'Профессиональные скины'
+    description: 'Профессиональные скины',
+    skins: [
+      { name: 'AK-47 | Неоновая революция', weapon: 'AK-47', rarity: 'epic', value: 65 },
+      { name: 'M4A4 | Неоновый всадник', weapon: 'M4A4', rarity: 'epic', value: 58 },
+      { name: 'AWP | Неоновый гонщик', weapon: 'AWP', rarity: 'epic', value: 70 },
+      { name: 'Desert Eagle | Гипноз', weapon: 'Desert Eagle', rarity: 'rare', value: 42 },
+      { name: 'USP-S | Неоновый убийца', weapon: 'USP-S', rarity: 'epic', value: 52 },
+    ]
   },
   {
     id: 6,
@@ -62,7 +108,14 @@ const cases: Case[] = [
     price: 149,
     rarity: 'rare',
     image: 'https://cdn.poehali.dev/projects/9c9d1bba-30a2-40ab-9f99-d84dc68eb0fd/files/9390f328-7669-463d-a1d3-f2482440f973.jpg',
-    description: 'Темные и стильные предметы'
+    description: 'Темные и стильные предметы',
+    skins: [
+      { name: 'AK-47 | Ночной кошмар', weapon: 'AK-47', rarity: 'rare', value: 20 },
+      { name: 'M4A1-S | Темная вода', weapon: 'M4A1-S', rarity: 'rare', value: 18 },
+      { name: 'AWP | Корпус', weapon: 'AWP', rarity: 'rare', value: 22 },
+      { name: 'Glock-18 | Ночь', weapon: 'Glock-18', rarity: 'common', value: 12 },
+      { name: 'Five-SeveN | Ночные работы', weapon: 'Five-SeveN', rarity: 'rare', value: 25 },
+    ]
   },
 ];
 
@@ -75,6 +128,59 @@ const rarityColors = {
 
 const Index = () => {
   const [selectedRarity, setSelectedRarity] = useState<string>('all');
+  const [isOpeningCase, setIsOpeningCase] = useState(false);
+  const [wonSkin, setWonSkin] = useState<Skin | null>(null);
+  const [isWinner, setIsWinner] = useState(false);
+
+  const openCase = (caseItem: Case) => {
+    setIsOpeningCase(true);
+    
+    setTimeout(() => {
+      const winChance = Math.random();
+      const profitThreshold = 0.15;
+      
+      let selectedSkin: Skin;
+      
+      if (winChance < profitThreshold) {
+        const profitableSkins = caseItem.skins.filter(s => s.value >= caseItem.price);
+        if (profitableSkins.length > 0) {
+          selectedSkin = profitableSkins[Math.floor(Math.random() * profitableSkins.length)];
+          setIsWinner(true);
+        } else {
+          const rareSkins = caseItem.skins.filter(s => s.rarity === 'epic' || s.rarity === 'legendary');
+          selectedSkin = rareSkins.length > 0 
+            ? rareSkins[Math.floor(Math.random() * rareSkins.length)]
+            : caseItem.skins[Math.floor(Math.random() * caseItem.skins.length)];
+          setIsWinner(false);
+        }
+      } else {
+        const weights = caseItem.skins.map(skin => {
+          if (skin.rarity === 'legendary') return 2;
+          if (skin.rarity === 'epic') return 5;
+          if (skin.rarity === 'rare') return 15;
+          return 78;
+        });
+        
+        const totalWeight = weights.reduce((a, b) => a + b, 0);
+        let random = Math.random() * totalWeight;
+        
+        let skinIndex = 0;
+        for (let i = 0; i < weights.length; i++) {
+          random -= weights[i];
+          if (random <= 0) {
+            skinIndex = i;
+            break;
+          }
+        }
+        
+        selectedSkin = caseItem.skins[skinIndex];
+        setIsWinner(selectedSkin.value >= caseItem.price);
+      }
+      
+      setWonSkin(selectedSkin);
+      setIsOpeningCase(false);
+    }, 2000);
+  };
 
   const filteredCases = selectedRarity === 'all' 
     ? cases 
@@ -172,7 +278,10 @@ const Index = () => {
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
                   <span className="text-2xl font-bold text-neon-purple">{caseItem.price} ₽</span>
-                  <Button className="bg-neon-purple hover:bg-neon-purple/80 text-primary-foreground">
+                  <Button 
+                    className="bg-neon-purple hover:bg-neon-purple/80 text-primary-foreground"
+                    onClick={() => openCase(caseItem)}
+                  >
                     <Icon name="ShoppingCart" className="mr-2" size={18} />
                     Открыть
                   </Button>
@@ -328,6 +437,75 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <Dialog open={wonSkin !== null} onOpenChange={(open) => !open && setWonSkin(null)}>
+        <DialogContent className="bg-card border-neon-purple max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-heading text-center">
+              {isWinner ? (
+                <span className="text-neon-purple animate-glow-pulse">🎉 Поздравляем! Выигрыш!</span>
+              ) : (
+                <span className="text-foreground">Ваш предмет</span>
+              )}
+            </DialogTitle>
+            <DialogDescription className="text-center text-muted-foreground">
+              {isWinner ? 'Вы выиграли дороже кейса!' : 'Возможно, повезёт в следующий раз'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {wonSkin && (
+            <div className="py-6">
+              <div className={`relative p-6 rounded-lg border-2 ${
+                wonSkin.rarity === 'legendary' ? 'border-neon-purple neon-glow bg-neon-purple/10' :
+                wonSkin.rarity === 'epic' ? 'border-neon-blue neon-glow-blue bg-neon-blue/10' :
+                wonSkin.rarity === 'rare' ? 'border-secondary bg-secondary/10' :
+                'border-muted bg-muted/10'
+              } transition-all duration-500 animate-scale-in`}>
+                <div className="text-center space-y-3">
+                  <Badge className={rarityColors[wonSkin.rarity]}>
+                    {wonSkin.rarity}
+                  </Badge>
+                  <h3 className="text-xl font-heading font-bold">{wonSkin.name}</h3>
+                  <p className="text-muted-foreground">{wonSkin.weapon}</p>
+                  <div className="pt-4">
+                    <span className="text-3xl font-bold text-neon-purple">{wonSkin.value} ₽</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 flex gap-3">
+                <Button 
+                  className="flex-1 bg-neon-purple hover:bg-neon-purple/80"
+                  onClick={() => setWonSkin(null)}
+                >
+                  <Icon name="Package" className="mr-2" size={18} />
+                  В инвентарь
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="flex-1 border-neon-blue text-neon-blue hover:bg-neon-blue/10"
+                  onClick={() => setWonSkin(null)}
+                >
+                  <Icon name="Repeat" className="mr-2" size={18} />
+                  Ещё раз
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isOpeningCase} onOpenChange={() => {}}>
+        <DialogContent className="bg-card border-neon-purple max-w-md" hideClose>
+          <div className="py-12 text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-neon-purple/20 flex items-center justify-center animate-glow-pulse">
+              <Icon name="Package" size={48} className="text-neon-purple animate-float" />
+            </div>
+            <h3 className="text-2xl font-heading font-bold mb-2">Открываем кейс...</h3>
+            <p className="text-muted-foreground">Определяем ваш выигрыш</p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
